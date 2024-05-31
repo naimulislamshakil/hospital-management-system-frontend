@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-export const singup = createAsyncThunk('auth/singUpData', async (data) => {
-	const responce = await fetch('http://localhost:5000/api/v1/user/register', {
+export const login = createAsyncThunk('auth/loginData', async (data) => {
+	
+	const responce = await fetch('http://localhost:5000/api/v1/user/login', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(data),
@@ -9,8 +10,8 @@ export const singup = createAsyncThunk('auth/singUpData', async (data) => {
 	return responce.json();
 });
 
-const authSlice = createSlice({
-	name: 'auth',
+const loginSlice = createSlice({
+	name: 'login',
 	initialState: {
 		isLoading: false,
 		error: null,
@@ -19,17 +20,17 @@ const authSlice = createSlice({
 
 	extraReducers: (builder) => {
 		builder
-			.addCase(singup.pending, (state, action) => {
+			.addCase(login.pending, (state, action) => {
 				state.isLoading = true;
 				state.error = null;
 			})
-			.addCase(singup.fulfilled, (state, action) => {
+			.addCase(login.fulfilled, (state, action) => {
 				state.error = null;
 				state.isLoading = false;
 				state.results = null;
 				state.results = action.payload;
 			})
-			.addCase(singup.rejected, (state, action) => {
+			.addCase(login.rejected, (state, action) => {
 				state.error = null;
 				state.error = action.error;
 				state.isLoading = false;
@@ -38,4 +39,4 @@ const authSlice = createSlice({
 	},
 });
 
-export default authSlice.reducer;
+export default loginSlice.reducer;

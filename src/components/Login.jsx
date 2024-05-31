@@ -1,42 +1,36 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { singup } from '../Store/Slice/authSlice';
-import { errorToast, successToast } from '../lib/toast';
 import { Link, useNavigate } from 'react-router-dom';
+import { login } from '../Store/Slice/loginSlice';
+import { errorToast, successToast } from '../lib/toast';
 
-const Register = () => {
+const Login = () => {
 	const [email, setEmail] = useState();
 	const [password, setPassword] = useState();
-	const [firstName, setFirstName] = useState();
-	const [lastName, setLastName] = useState();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const { isLoading, error, results } = useSelector((state) => state.login);
 
-	const { isLoading, error, results } = useSelector((state) => state.auth);
-
-	console.log({ isLoading, error, results });
+	console.log(results);
 
 	if (results?.success === true) {
 		successToast(results?.message);
-		navigate('/login');
+		navigate('/');
 	}
 
 	if (results?.success === false) {
 		errorToast(results?.error);
-		// clearMessage();
 	}
 
-	const data = { email, password, firstName, lastName };
+	const data = { email, password };
 
 	const onSubmit = (event) => {
 		event.preventDefault();
 
-		dispatch(singup(data));
+		dispatch(login(data));
 	};
-
 	return (
 		<section class="bg-primary p-3 p-md-4 p-xl-5">
-			{/*  */}
 			<div class="container">
 				<div class="row justify-content-center">
 					<div class="col-12 col-md-9 col-lg-7 col-xl-6 col-xxl-5">
@@ -45,45 +39,15 @@ const Register = () => {
 								<div class="row">
 									<div class="col-12">
 										<div class="mb-5">
-											<h2 class="h3 text-uppercase">Registration</h2>
+											<h2 class="h3 text-uppercase">Login</h2>
 											<h3 class="fs-6 fw-normal text-secondary m-0">
-												Enter your details to register!!
+												Enter your details to login!!
 											</h3>
 										</div>
 									</div>
 								</div>
 								<form onSubmit={onSubmit}>
 									<div class="row gy-3 overflow-hidden">
-										<div class="col-12">
-											<div class="form-floating mb-3">
-												<input
-													type="text"
-													class="form-control"
-													name="firstName"
-													id="firstName"
-													placeholder="First Name"
-													onChange={(e) => setFirstName(e.target.value)}
-												/>
-												<label for="firstName" class="form-label">
-													First Name
-												</label>
-											</div>
-										</div>
-										<div class="col-12">
-											<div class="form-floating mb-3">
-												<input
-													type="text"
-													class="form-control"
-													name="lastName"
-													id="lastName"
-													placeholder="First Name"
-													onChange={(e) => setLastName(e.target.value)}
-												/>
-												<label for="lastName" class="form-label">
-													Last Name
-												</label>
-											</div>
-										</div>
 										<div class="col-12">
 											<div class="form-floating mb-3">
 												<input
@@ -116,10 +80,10 @@ const Register = () => {
 												</label>
 											</div>
 										</div>
-										<div class="col-12 text-center">
+										<div class="col-12">
 											<div class="form-check">
 												<input
-													class="form-check-input text-center"
+													class="form-check-input"
 													type="checkbox"
 													value=""
 													name="iAgree"
@@ -146,7 +110,8 @@ const Register = () => {
 													disabled={isLoading}
 													class="btn bsb-btn-2xl btn-primary"
 													type="submit"
-													value="Create a Account🥰"
+													value="Login🥰"
+													
 												/>
 											</div>
 										</div>
@@ -156,12 +121,12 @@ const Register = () => {
 									<div class="col-12">
 										<hr class="mt-5 mb-4 border-secondary-subtle" />
 										<p class="m-0 text-secondary text-center">
-											Already have an account?{' '}
+											Haven't any account'?{' '}
 											<Link
-												to="/login"
+												to="/register"
 												class="link-primary text-decoration-none"
 											>
-												Sign in
+												Register
 											</Link>
 										</p>
 									</div>
@@ -175,4 +140,4 @@ const Register = () => {
 	);
 };
 
-export default Register;
+export default Login;
