@@ -1,17 +1,36 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { login } from '../Store/Slice/loginSlice';
 import { errorToast, successToast } from '../lib/toast';
+import { useMutation } from 'react-query';
+import axios from 'axios';
 
 const Login = () => {
 	const [email, setEmail] = useState();
 	const [password, setPassword] = useState();
-	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const { isLoading, error, results } = useSelector((state) => state.login);
+	const data = { email, password };
 
-	console.log(results);
+	const {
+		data: results,
+		mutate,
+		isLoading,
+		reset,
+	} = useMutation({
+		mutationFn: async () => {
+			axios.defaults.withCredentials = true;
+			const res = await axios.post(
+				'http://localhost:5000/api/v1/user/login',
+				data
+			);
+
+			console.log({ res });
+
+			
+
+			return res.data;
+		},
+	});
+	console.log({ results });
 
 	if (results?.success === true) {
 		successToast(results?.message);
@@ -20,14 +39,13 @@ const Login = () => {
 
 	if (results?.success === false) {
 		errorToast(results?.error);
+		reset();
 	}
-
-	const data = { email, password };
 
 	const onSubmit = (event) => {
 		event.preventDefault();
 
-		dispatch(login(data));
+		mutate(data);
 	};
 	return (
 		<section class="bg-primary p-3 p-md-4 p-xl-5">
@@ -111,7 +129,6 @@ const Login = () => {
 													class="btn bsb-btn-2xl btn-primary"
 													type="submit"
 													value="Login🥰"
-													
 												/>
 											</div>
 										</div>
