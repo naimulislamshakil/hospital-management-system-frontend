@@ -3,9 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { errorToast } from '../lib/toast';
 import { useMutation, useQuery } from 'react-query';
 import axios from 'axios';
+import { Layout } from 'antd';
+import Logo from './Logo';
+import MenuList from './MenuList';
 
 const Home = () => {
 	const navigate = useNavigate();
+	const { Header, Sider } = Layout;
 
 	const {
 		data: results,
@@ -54,6 +58,10 @@ const Home = () => {
 		// clear();
 	}
 
+	// if (!results) {
+	// 	navigate('/login');
+	// }
+
 	console.log({ accessError, accessLoading, accessResults });
 
 	if (accessResults?.success === false) {
@@ -62,7 +70,16 @@ const Home = () => {
 		// clear();
 	}
 
-	return <div>Home</div>;
+	return (
+		<div>
+			<Layout>
+				<Sider className="sidebar">
+					<Logo />
+					<MenuList />
+				</Sider>
+			</Layout>
+		</div>
+	);
 };
 
 export default Home;
