@@ -6,6 +6,10 @@
 	--black: #111827;
 }
 
+body {
+	overflow-x: hidden;
+}
+
 .sidebar {
 	background-color: var(--white) !important;
 	color: var(--primary);
@@ -14,4 +18,15 @@
 
 .text {
 	font-size: 1rem;
+}
+
+.button {
+	margin-top: 20px;
+	background-color: var(--accent);
+	color: var(--white);
+}
+
+.button:hover {
+	background-color: var(--primary);
+	color: var(--white);
 }

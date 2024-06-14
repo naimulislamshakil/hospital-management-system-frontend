@@ -1,15 +1,18 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { errorToast } from '../lib/toast';
 import { useMutation, useQuery } from 'react-query';
 import axios from 'axios';
-import { Layout } from 'antd';
+import { Button, Layout } from 'antd';
 import Logo from './Logo';
 import MenuList from './MenuList';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 
 const Home = () => {
 	const navigate = useNavigate();
-	const { Header, Sider } = Layout;
+	const [collapsed, setCollapsed] = useState(false);
+	const [isOpen, setOpen] = useState(false);
+	const { Header, Sider, Content } = Layout;
 
 	const {
 		data: results,
@@ -73,10 +76,42 @@ const Home = () => {
 	return (
 		<div>
 			<Layout>
-				<Sider className="sidebar">
+				<Sider
+					className="sidebar"
+					collapsible
+					collapsed={collapsed}
+					trigger={null}
+				>
 					<Logo />
 					<MenuList />
 				</Sider>
+				<Layout>
+					<Header
+						style={{
+							padding: 0,
+							background: 'var(--white)',
+						}}
+					>
+						<div className="row">
+							<div className="col">
+								<div>
+									<Button
+										type="text"
+										className="ml-[15px]"
+										onClick={(e) => setCollapsed(!collapsed)}
+										icon={
+											collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
+										}
+									/>
+								</div>
+							</div>
+							<div className="col">ashndgb</div>
+						</div>
+					</Header>
+					<Content>
+						<Outlet />
+					</Content>
+				</Layout>
 			</Layout>
 		</div>
 	);
